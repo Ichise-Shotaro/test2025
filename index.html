@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>コーヒーメーカーUI</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="coffee-machine">
+    <div class="display" id="coffee-display">
+      コーヒーをセットしてボタンを押してください
+    </div>
+    <div class="section hot-section">
+      <div class="section-title">
+        <span class="line"></span>
+        <span class="label">HOT COFFEE</span>
+        <span class="line"></span>
+      </div>
+      <div class="button-row">
+        <div class="circle-btn hot-btn l-btn" data-type="hot">
+          <span class="cup"></span>
+          <span class="coffee-fill"></span>
+          <span class="handle"></span>
+          <span class="btn-label">L</span>
+        </div>
+        <div class="circle-btn hot-btn r-btn" data-type="hot">
+          <span class="cup"></span>
+          <span class="coffee-fill"></span>
+          <span class="handle"></span>
+          <span class="btn-label">R</span>
+        </div>
+      </div>
+    </div>
+    <div class="section ice-section">
+      <div class="section-title">
+        <span class="line"></span>
+        <span class="label">ICE COFFEE</span>
+        <span class="line"></span>
+      </div>
+      <div class="button-row">
+        <div class="circle-btn ice-btn l-btn" data-type="ice">
+          <span class="cup"></span>
+          <span class="coffee-fill"></span>
+          <span class="ice-cube"></span>
+          <span class="handle"></span>
+          <span class="btn-label">L</span>
+        </div>
+        <div class="circle-btn ice-btn r-btn" data-type="ice">
+          <span class="cup"></span>
+          <span class="coffee-fill"></span>
+          <span class="ice-cube"></span>
+          <span class="handle"></span>
+          <span class="btn-label">R</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const display = document.getElementById('coffee-display');
+    let brewing = false;
+    document.querySelectorAll('.circle-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        if (brewing) return; // 連打防止
+        brewing = true;
+        // 一度全てのボタンのactive-hot/active-iceを外す
+        document.querySelectorAll('.circle-btn').forEach(b => {
+          b.classList.remove('active-hot', 'active-ice');
+        });
+        if (btn.dataset.type === 'hot') {
+          btn.classList.add('active-hot');
+        } else if (btn.dataset.type === 'ice') {
+          btn.classList.add('active-ice');
+        }
+        display.textContent = 'コーヒーを抽出中...';
+        setTimeout(() => {
+          display.textContent = 'コーヒーができました！';
+          btn.classList.remove('active-hot', 'active-ice');
+          setTimeout(() => {
+            display.textContent = 'コーヒーをセットしてボタンを押してください';
+            brewing = false;
+          }, 2000);
+        }, 2000);
+      });
+    });
+  </script>
+</body>
+</html>
